@@ -1,0 +1,36 @@
+#!/bin/bash
+#SBATCH -n 1
+#SBATCH -N 1
+#SBATCH -t 4320
+#SBATCH -p all
+#SBATCH --mem=9000
+#SBATCH --open-mode=append
+#SBATCH --mail-type=END
+#SBATCH --mail-user=phi.richter@iup.physik.uni-bremen.de
+
+module unuse /home/eb/modules/all
+module unuse /home/eb/modules/LAMOS
+module use /home/eb/modules/_legacy/all
+module load Python
+module load netcdf4-python
+module load matplotlib
+
+mkdir /home/phi.richter/Data/FLUXES/RRTMG_Cloudnet_2/
+mkdir /home/phi.richter/Data/FLUXES/RRTMG_Scaled_2/
+mkdir /home/phi.richter/Data/FLUXES/RRTMG_ERA5_vert_2/
+
+for i in {30..31}
+do
+    sbatch RRTM 5 $i
+    sleep 5
+done
+for i in {1..30}
+do
+    sbatch RRTM 6 $i
+    sleep 5
+done
+for i in {1..19}
+do
+    sbatch RRTM 7 $i
+    sleep 5
+done
